@@ -1,0 +1,44 @@
+---
+- name: Check for ironbank files in tarball_install dir
+  ansible.builtin.stat:
+    path: "{{ playbook_dir }}/tarball_install/{{ item.value | replace('/', '-') | replace(':', '-')  }}.tar"
+  loop: "{{ ironbank_images_config | dict2items }}"
+  register: ironbank_tars_on_disk
+
+- name: debug stat 1
+  ansible.builtin.debug:
+    msg: "{{ ironbank_tars_on_disk }}"
+
+- name: Update config for images on disk
+  ansible.utils.update_fact:
+    updates:
+      - path: rke2_config.{{ item.item.key }}
+        value: "{{ item.item.value }}"
+  loop: "{{ ironbank_tars_on_disk.results }}"
+  register: updated2
+  when: item.stat.exists
+
+- name: Print config before ironbank changes
+  ansible.builtin.debug:
+    msg:
+      - original config {{ rke2_config }}
+      - Updates to combine {{ updated2.results | json_query('[].rke2_config')  | combine }}
+
+# Note, that the update_fact call above creates a list of rke2_configs. one for each item in the list.
+# so just merge back into 1 here. There's probably a better way to do this
+- name: set rke2 config fact
+  set_fact:
+    rke2_config: "{{ updated2.results | json_query('[].rke2_config')  | combine }}"
+
+- name: Print config after ironbank change
+  ansible.builtin.debug:
+    msg:
+      - config {{ rke2_config }}
+
+- name: Add ironbank images to needed directory if provided
+  copy:
+    src: "{{ item.stat.path }}"
+    dest: /var/lib/rancher/rke2/agent/images/
+    mode: '0644'
+  loop: "{{ ironbank_tars_on_disk.results }}"
+  when: item.stat.exists

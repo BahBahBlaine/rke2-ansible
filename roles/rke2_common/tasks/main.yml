@@ -10,6 +10,8 @@
 - name: Has rke2 been installed already
   include_tasks: previous_install.yml
 
+- include: ironbank.yml
+
 - include: images_tarball_install.yml
   when: not installed
 

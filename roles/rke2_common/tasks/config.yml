@@ -1,5 +1,4 @@
 ---
-
 - name: Does the /etc/rancher/rke2 dir exist?
   stat:
     path: /etc/rancher/rke2
