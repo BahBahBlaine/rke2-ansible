@@ -5,6 +5,7 @@ audit_policy_config_file_path: ""
 registry_config_file_path: ""
 add_iptables_rules: false
 rke2_config: {}
+airgap_ironbank_images: false
 
 # TODO, find a way to get the image name from the tar file or something more automated
 ironbank_images_config:
@@ -14,3 +15,5 @@ ironbank_images_config:
   kube-proxy-image: registry1.dso.mil/ironbank/rancher-federal/rke2/hardened-kubernetes:v1.21.3-rke2r1-build20210721
   runtime-image: registry1.dso.mil/ironbank/rancher-federal/rke2/rke2-runtime:v1.21.3-rke2r1
   pause-image: registry1.dso.mil/ironbank/rancher-federal/rke2/pause:3.5
+  # requires enabling profile: cis-1.6
+  etcd-image: registry1.dso.mil/ironbank/rancher-federal/rke2/etcd:v3.4.13-k3s1-build20210223

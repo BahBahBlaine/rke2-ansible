@@ -1,0 +1,7 @@
+mirrors:
+  docker.io:
+    endpoint:
+      - "localhost:5000"
+    rewrite:
+      "^rancher/hardened-(calico|coredns|flannel|k8s-metrics-server):(.*)": "localhost:5000/ironbank/rancher-federal/rke2/$1:$2"
+      "^rancher/klipper-helm:(.*)": "localhost:5000/ironbank/rancher-federal/rke2/klipper-helm:$1"
