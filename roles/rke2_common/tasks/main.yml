@@ -62,7 +62,7 @@
   include_tasks: iptables_rules.yml
   when:
     - ansible_facts.services["iptables.service"] is defined
-    - add_iptables_rules is true
+    - add_iptables_rules == true
 
 - include: add-audit-policy-config.yml
   when:
