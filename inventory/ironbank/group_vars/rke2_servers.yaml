@@ -1,0 +1,5 @@
+registry_config_file_path: "{{ inventory_dir }}/files/registry.yml"
+
+rke2_config:
+  profile: cis-1.6
+  disable: rke2-ingress-nginx

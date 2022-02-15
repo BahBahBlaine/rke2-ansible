@@ -1,7 +1,12 @@
 mirrors:
   docker.io:
     endpoint:
-      - "localhost:5000"
+      - "http://localhost:5000"
     rewrite:
-      "^rancher/hardened-(calico|coredns|flannel|k8s-metrics-server):(.*)": "localhost:5000/ironbank/rancher-federal/rke2/$1:$2"
-      "^rancher/klipper-helm:(.*)": "localhost:5000/ironbank/rancher-federal/rke2/klipper-helm:$1"
+      "^rancher/hardened-(calico|coredns|flannel|k8s-metrics-server)(.*)": "ironbank/rancher-federal/rke2/$1$2"
+      # ironbank for klipper-helm doesn't work currently. And there is not currently an rke2-cloud-provider image
+      #      "^rancher/(klipper-helm|rke2-cloud-provider)(.*)": "localhost:5000/ironbank/rancher-federal/rke2/$1$2"
+
+  registry1.dso.mil:
+    endpoint:
+      - "http://localhost:5000"

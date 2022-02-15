@@ -33,7 +33,7 @@
 
 - name: Print config after ironbank change
   ansible.builtin.debug:
-    var: rke_2_config
+    var: rke2_config
 
 - name: Add ironbank images to needed directory if provided
   copy:
