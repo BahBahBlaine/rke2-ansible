@@ -1,7 +1,7 @@
 ---
 - name: Check for ironbank files in tarball_install dir
   ansible.builtin.stat:
-    path: "{{ playbook_dir }}/tarball_install/{{ item.value | replace('/', '-') | replace(':', '-')  }}.tar"
+    path: "{{ playbook_dir }}/tarball_install/ironbank/{{ item.value | replace('/', '-') | replace(':', '-')  }}.tar"
   loop: "{{ ironbank_images_config | dict2items }}"
   register: ironbank_tars_on_disk
 
@@ -11,7 +11,7 @@
       - "{{ ironbank_tars_on_disk }}"
       - "{{ registry_config_file_path }}"
 
-- name: Update config for images on disk
+- name: Update config for ironbank images
   ansible.utils.update_fact:
     updates:
       - path: rke2_config.{{ item.item.key }}
@@ -37,8 +37,8 @@
 
 - name: Add ironbank images to needed directory if provided
   copy:
-    src: "{{ item.stat.path }}"
+    src: "{{ item }}"
     dest: /var/lib/rancher/rke2/agent/images/
     mode: '0644'
-  loop: "{{ ironbank_tars_on_disk.results }}"
-  when: item.stat.exists
+  with_fileglob:
+    - "{{ playbook_dir }}/tarball_install/ironbank/*.tar"
